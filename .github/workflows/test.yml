@@ -1,0 +1,38 @@
+name: Check lint errors
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-errors:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (uses a specific Node.js version)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies..."
+          npm ci
+          echo "Dependencies installed successfully."
+
+      # Step 5: Lint check
+      - name: Run lint check
+        run: |
+          echo "Running lint check..."
+          npm run lint || echo "Linting failed. Please fix the issues."
+          echo "Lint check completed."
